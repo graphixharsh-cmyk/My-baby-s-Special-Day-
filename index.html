@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chaand Si Mehbooba — For Arshita</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night: #140d2b;
+    --night-2: #221847;
+    --night-3: #2f2160;
+    --moon: #ffe9b0;
+    --moon-glow: #ffd76a;
+    --blush: #ff8fa3;
+    --rose: #ef5677;
+    --lavender: #c6b6ff;
+    --cream: #fdf6ec;
+    --cream-dim: #e8dfd0;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html,body{
+    height:100%;
+    background: var(--night);
+    overflow:hidden;
+    font-family:'Quicksand', sans-serif;
+    color: var(--cream);
+  }
+
+  h1,h2,h3, .serif{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+  }
+
+  #sky{
+    position:fixed; inset:0;
+    background:
+      radial-gradient(ellipse at 20% 15%, rgba(255,215,106,0.06), transparent 45%),
+      radial-gradient(ellipse at 80% 80%, rgba(198,182,255,0.08), transparent 50%),
+      linear-gradient(180deg, var(--night) 0%, var(--night-2) 55%, var(--night-3) 100%);
+    z-index:0;
+  }
+
+  .star{
+    position:absolute;
+    width:2px; height:2px;
+    background: var(--cream);
+    border-radius:50%;
+    opacity:0.5;
+    animation: twinkle 3.5s ease-in-out infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{ opacity:0.15; transform:scale(1); }
+    50%{ opacity:0.9; transform:scale(1.6); }
+  }
+
+  #moon-bg{
+    position:fixed;
+    top:-90px; right:-90px;
+    width:260px; height:260px;
+    border-radius:50%;
+    background: radial-gradient(circle at 35% 35%, #fff6da, var(--moon) 55%, var(--moon-glow) 100%);
+    box-shadow: 0 0 90px 20px rgba(255,215,106,0.25);
+    z-index:0;
+    opacity:0.9;
+  }
+  #moon-bg::after{
+    content:'';
+    position:absolute;
+    top:10%; left:-6%;
+    width:100%; height:100%;
+    border-radius:50%;
+    background: var(--night-2);
+    opacity:0.9;
+  }
+
+  #app{
+    position:relative;
+    z-index:2;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding: 24px;
+  }
+
+  #progress{
+    position:fixed;
+    top:22px; left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:9px;
+    z-index:5;
+  }
+  .phase{
+    width:11px; height:11px;
+    border-radius:50%;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,233,176,0.25);
+    transition: all .5s ease;
+  }
+  .phase.done{
+    background: var(--moon-glow);
+    box-shadow: 0 0 8px 2px rgba(255,215,106,0.6);
+    border-color: var(--moon-glow);
+  }
+  .phase.current{
+    background: var(--blush);
+    box-shadow: 0 0 10px 3px rgba(255,143,163,0.7);
+    border-color: var(--blush);
+    transform: scale(1.25);
+  }
+
+  .card{
+    width:100%;
+    max-width: 480px;
+    background: rgba(253, 246, 236, 0.06);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,233,176,0.18);
+    border-radius: 22px;
+    padding: 42px 32px 34px;
+    text-align:center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    gap:16px;
+    animation: rise .7s ease;
+  }
+  .card.active{ display:flex; }
+
+  @keyframes rise{
+    from{ opacity:0; transform: translateY(18px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  .eyebrow{
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    color: var(--lavender);
+    font-weight: 600;
+  }
+
+  .card h2{
+    font-size: 30px;
+    line-height:1.25;
+    color: var(--cream);
+  }
+  .card h2 em{
+    font-style:italic;
+    color: var(--blush);
+  }
+
+  .card p{
+    font-size:16px;
+    line-height:1.65;
+    color: var(--cream-dim);
+    max-width: 38ch;
+  }
+
+  .shayari{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:21px;
+    line-height:1.85;
+    color: var(--moon);
+    white-space: pre-line;
+  }
+
+  button{
+    font-family:'Quicksand', sans-serif;
+    font-weight:600;
+    font-size:15px;
+    letter-spacing: 0.02em;
+    border:none;
+    cursor:pointer;
+    border-radius: 999px;
+    padding: 13px 30px;
+    background: linear-gradient(135deg, var(--blush), var(--rose));
+    color: #2b0f1c;
+    box-shadow: 0 8px 22px rgba(239,86,119,0.35);
+    transition: transform .2s ease, box-shadow .2s ease;
+    margin-top: 6px;
+  }
+  button:hover{ transform: translateY(-2px); box-shadow: 0 12px 26px rgba(239,86,119,0.45); }
+  button:active{ transform: translateY(0); }
+
+  button.ghost{
+    background: transparent;
+    color: var(--cream-dim);
+    box-shadow:none;
+    border: 1px solid rgba(253,246,236,0.25);
+    padding: 11px 26px;
+  }
+
+  .row{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; }
+
+  /* Step 2 quiz */
+  .options{ display:flex; flex-direction:column; gap:10px; width:100%; margin-top:4px; }
+  .opt{
+    background: rgba(253,246,236,0.07);
+    border:1px solid rgba(253,246,236,0.18);
+    color: var(--cream);
+    border-radius:14px;
+    padding:12px 16px;
+    font-size:15px;
+    cursor:pointer;
+    text-align:left;
+    transition: all .2s ease;
+  }
+  .opt:hover{ background: rgba(255,143,163,0.15); border-color: var(--blush); }
+  .opt.wrong{ animation: shake .4s ease; }
+  .opt.right{ background: rgba(255,215,106,0.2); border-color: var(--moon-glow); }
+  @keyframes shake{
+    0%,100%{ transform: translateX(0); }
+    25%{ transform: translateX(-6px); }
+    75%{ transform: translateX(6px); }
+  }
+
+  /* Step 3 hearts */
+  .heart-field{ position:relative; width:100%; height:150px; }
+  .float-heart{
+    position:absolute;
+    font-size:26px;
+    cursor:pointer;
+    user-select:none;
+    animation: bob 3s ease-in-out infinite;
+    transition: transform .2s ease;
+  }
+  .float-heart:hover{ transform: scale(1.2); }
+  @keyframes bob{
+    0%,100%{ transform: translateY(0); }
+    50%{ transform: translateY(-10px); }
+  }
+  .float-heart.popped{ animation: popOut .5s ease forwards; pointer-events:none; }
+  @keyframes popOut{
+    to{ transform: scale(2); opacity:0; }
+  }
+  .reason-line{
+    font-size:15px;
+    color: var(--moon);
+    opacity:0;
+    height:0;
+    transition: opacity .4s ease;
+  }
+  .reason-line.show{ opacity:1; height:auto; margin-top:2px; }
+  .reason-counter{ font-size:13px; color: var(--lavender); }
+
+  /* Step 4 stars */
+  .star-field{ position:relative; width:100%; height:140px; }
+  .tap-star{
+    position:absolute;
+    font-size:22px;
+    cursor:pointer;
+    filter: drop-shadow(0 0 4px rgba(255,215,106,0.6));
+    animation: drift 4s ease-in-out infinite;
+  }
+  @keyframes drift{
+    0%,100%{ transform: translateY(0) rotate(0deg); }
+    50%{ transform: translateY(-8px) rotate(12deg); }
+  }
+  .tap-star.caught{ opacity:0; transform: scale(1.8); transition: all .4s ease; }
+  .wish-msg{ font-size:14px; color: var(--moon); min-height:20px; }
+
+  /* countdown */
+  .countdown-num{
+    font-family:'Cormorant Garamond', serif;
+    font-size: 72px;
+    color: var(--moon);
+    line-height:1;
+  }
+
+  /* Step 10 surprise */
+  #finale{
+    position:fixed; inset:0;
+    z-index:10;
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    overflow:hidden;
+    background: radial-gradient(ellipse at 50% 0%, rgba(255,215,106,0.10), transparent 55%), var(--night);
+    padding: 26px 20px;
+  }
+  #finale.active{ display:flex; }
+
+  .finale-title{
+    text-align:center;
+    margin-top: 10px;
+    font-size:15px;
+    letter-spacing:0.05em;
+    color: var(--lavender);
+  }
+
+  .name-reveal{
+    display:flex;
+    gap:6px;
+    justify-content:center;
+    margin: 6px 0 8px;
+    flex-wrap:wrap;
+  }
+  .name-letter{
+    font-family:'Cormorant Garamond', serif;
+    font-size: 34px;
+    color: var(--moon);
+    opacity:0.15;
+    transition: all .5s ease;
+  }
+  .name-letter.lit{
+    opacity:1;
+    text-shadow: 0 0 18px rgba(255,215,106,0.7);
+    transform: translateY(-4px);
+  }
+
+  .balloon-row{
+    display:flex;
+    gap: 14px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin: 6px 0 4px;
+  }
+  .balloon{
+    position:relative;
+    width:52px; height:64px;
+    border-radius: 50% 50% 50% 50% / 55% 55% 45% 45%;
+    cursor:pointer;
+    transition: transform .15s ease;
+    display:flex; align-items:center; justify-content:center;
+    color: rgba(20,13,43,0.55);
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:20px;
+  }
+  .balloon:hover{ transform: translateY(-4px) scale(1.04); }
+  .balloon::after{
+    content:'';
+    position:absolute;
+    bottom:-16px; left:50%;
+    width:1px; height:16px;
+    background: rgba(253,246,236,0.4);
+  }
+  .balloon.b1{ background: radial-gradient(circle at 32% 28%, #ffd7de, var(--rose)); }
+  .balloon.b2{ background: radial-gradient(circle at 32% 28%, #ffe9c2, var(--moon-glow)); }
+  .balloon.b3{ background: radial-gradient(circle at 32% 28%, #e2d6ff, var(--lavender)); }
+  .balloon.b4{ background: radial-gradient(circle at 32% 28%, #ffd7de, var(--blush)); }
+  .balloon.b5{ background: radial-gradient(circle at 32% 28%, #d6f5e3, #6fd6a0); }
+  .balloon.b6{ background: radial-gradient(circle at 32% 28%, #ffe9c2, #ffb648); }
+  .balloon.b7{ background: radial-gradient(circle at 32% 28%, #e2d6ff, #a98bff); }
+  .balloon.popped{ animation: burst .35s ease forwards; }
+  @keyframes burst{
+    0%{ transform: scale(1); }
+    60%{ transform: scale(1.5); opacity:0.6; }
+    100%{ transform: scale(0.2); opacity:0; }
+  }
+
+  .cake{
+    margin: 10px 0 4px;
+    text-align:center;
+  }
+  .candles{
+    display:flex;
+    gap:16px;
+    justify-content:center;
+    margin-bottom: -6px;
+  }
+  .candle{ position:relative; width:8px; height:34px; }
+  .candle-stick{
+    width:8px; height:34px;
+    background: linear-gradient(180deg, var(--lavender), var(--rose));
+    border-radius:3px;
+  }
+  .flame{
+    position:absolute;
+    top:-16px; left:50%;
+    transform: translateX(-50%);
+    width:11px; height:16px;
+    background: radial-gradient(circle at 50% 70%, #fff5c8, var(--moon-glow) 60%, #ff8a3d 100%);
+    border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
+    cursor:pointer;
+    animation: flicker 1.4s ease-in-out infinite;
+    box-shadow: 0 0 12px 3px rgba(255,183,72,0.7);
+  }
+  @keyframes flicker{
+    0%,100%{ transform: translateX(-50%) scale(1) rotate(-2deg); }
+    50%{ transform: translateX(-50%) scale(1.1) rotate(3deg); }
+  }
+  .flame.out{
+    animation:none;
+    opacity:0;
+    box-shadow:none;
+  }
+  .cake-body{
+    width: 168px; height:56px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, #fff2df, #f4c98f);
+    border-radius: 10px 10px 26px 26px;
+    box-shadow: inset 0 -8px 0 rgba(0,0,0,0.06);
+    position:relative;
+  }
+  .cake-body::before{
+    content:'';
+    position:absolute;
+    top:-10px; left:0; right:0;
+    height:16px;
+    background: repeating-linear-gradient(90deg, var(--blush), var(--blush) 10px, #fff 10px, #fff 20px);
+    border-radius: 10px 10px 0 0;
+  }
+  .blow-hint{
+    font-size:13px;
+    color: var(--lavender);
+    margin-top: 4px;
+  }
+
+  .final-msg{
+    margin-top: 14px;
+    text-align:center;
+    max-width: 420px;
+  }
+  .final-msg h1{
+    font-size: 40px;
+    color: var(--cream);
+  }
+  .final-msg h1 em{ color: var(--blush); font-style:italic; }
+  .final-msg .shayari{ margin-top:14px; }
+  .song-note{
+    margin-top:16px;
+    font-size:14px;
+    color: var(--lavender);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+  }
+  .signature{
+    margin-top: 18px;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color: var(--moon-dim, var(--cream-dim));
+    font-size:15px;
+  }
+
+  #confetti-layer{
+    position:fixed; inset:0;
+    pointer-events:none;
+    z-index:20;
+    overflow:hidden;
+  }
+  .confetti-piece{
+    position:absolute;
+    top:-10px;
+    width:8px; height:14px;
+    opacity:0.9;
+    animation-name: fall;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+  }
+  @keyframes fall{
+    to{ transform: translateY(110vh) rotate(540deg); opacity:0.3; }
+  }
+
+  .hearts-rise{
+    position:fixed; inset:0;
+    pointer-events:none;
+    z-index:19;
+  }
+  .rise-heart{
+    position:absolute;
+    bottom:-30px;
+    font-size:20px;
+    animation-name: floatUp;
+    animation-timing-function: ease-out;
+    animation-fill-mode:forwards;
+    opacity:0.85;
+  }
+  @keyframes floatUp{
+    to{ transform: translateY(-100vh) translateX(var(--drift,0px)); opacity:0; }
+  }
+
+  footer.made{
+    position:fixed;
+    bottom:10px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:11px;
+    color: rgba(253,246,236,0.35);
+    z-index:5;
+    letter-spacing:0.03em;
+  }
+
+  @media (max-width:420px){
+    .card{ padding: 34px 22px 28px; }
+    .card h2{ font-size:25px; }
+    .final-msg h1{ font-size:32px; }
+    .cake-body{ width:140px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="sky"></div>
+<div id="moon-bg"></div>
+<div id="progress"></div>
+
+<div id="app">
+
+  <!-- STEP 1 -->
+  <div class="card active" data-step="1">
+    <div class="eyebrow">for Arshita</div>
+    <h2>Somewhere between today<br>and midnight, <em>a moon is rising.</em></h2>
+    <p>It's almost your birthday. Before the clock strikes twelve, come with me through a little journey — nine small moments, and one big one waiting at the end.</p>
+    <button onclick="goTo(2)">Shuru karein →</button>
+  </div>
+
+  <!-- STEP 2: quiz -->
+  <div class="card" data-step="2">
+    <div class="eyebrow">01 · a quick question</div>
+    <h2>Do you know what's special about today?</h2>
+    <div class="options" id="quiz-options">
+      <div class="opt" onclick="quizPick(this,false)">It's just a regular Wednesday</div>
+      <div class="opt" onclick="quizPick(this,false)">The moon looked bored today</div>
+      <div class="opt" onclick="quizPick(this,true)">It's the eve of the best day of the year — yours</div>
+    </div>
+    <p id="quiz-feedback" style="min-height:18px; font-size:14px; color: var(--blush);"></p>
+  </div>
+
+  <!-- STEP 3: reasons hearts -->
+  <div class="card" data-step="3">
+    <div class="eyebrow">02 · tap the hearts</div>
+    <h2>A few reasons, <em>out of many.</em></h2>
+    <div class="heart-field" id="heart-field"></div>
+    <p class="reason-counter" id="reason-counter">0 of 5 found</p>
+    <div id="reason-text" class="reason-line"></div>
+    <button class="ghost" id="reasons-next" style="display:none;" onclick="goTo(4)">Next →</button>
+  </div>
+
+  <!-- STEP 4: stars / wish -->
+  <div class="card" data-step="4">
+    <div class="eyebrow">03 · catch a little sparkle</div>
+    <h2>Tap the stars, <em>make a small wish.</em></h2>
+    <div class="star-field" id="star-field"></div>
+    <p class="wish-msg" id="wish-msg">five stars are hiding up there</p>
+    <button class="ghost" id="stars-next" style="display:none;" onclick="goTo(5)">Next →</button>
+  </div>
+
+  <!-- STEP 5: confession note -->
+  <div class="card" data-step="5">
+    <div class="eyebrow">04 · a small note</div>
+    <h2>You have a way of turning <em>ordinary days golden.</em></h2>
+    <p>I don't know how you do it — but even the most tiring day feels lighter the moment you laugh at something silly, or send a random voice note, or just exist somewhere in the world. Tonight, I just wanted you to know that.</p>
+    <button onclick="goTo(6)">Keep going →</button>
+  </div>
+
+  <!-- STEP 6: shayari -->
+  <div class="card" data-step="6">
+    <div class="eyebrow">05 · you love shayari, so —</div>
+    <h2>Ek chhoti si shayari, <em>tere naam.</em></h2>
+    <div class="shayari">Chaand raaton mein chamakta hai magar,
+teri muskaan se sharma jaata hai woh bhi,
+har khushi adhoori si lagti hai tere bina,
+tu mil jaaye toh zindagi bhi poori lagti hai.</div>
+    <button onclick="goTo(7)">Next →</button>
+  </div>
+
+  <!-- STEP 7: song -->
+  <div class="card" data-step="7">
+    <div class="eyebrow">06 · a song for you</div>
+    <h2>Somewhere, an old song<br>is <em>playing softly.</em></h2>
+    <p>You know the one — <span class="serif" style="font-style:italic; color:var(--moon);">"Chaand Si Mehbooba Ho Meri"</span>. Every time it plays, I think it was written a little bit for you. Put it on tonight if you can — just for a minute, just for us.</p>
+    <button onclick="goTo(8)">Next →</button>
+  </div>
+
+  <!-- STEP 8: playful pause -->
+  <div class="card" data-step="8">
+    <div class="eyebrow">07 · almost there</div>
+    <h2>Close your eyes for <em>three seconds.</em></h2>
+    <p>Not really — I know you're going to peek. But hum "Chaand Si Mehbooba" quietly in your head, and press the button when you're ready.</p>
+    <button onclick="goTo(9)">Main ready hoon →</button>
+  </div>
+
+  <!-- STEP 9: countdown -->
+  <div class="card" data-step="9">
+    <div class="eyebrow">08 · the last minute</div>
+    <h2>Midnight is <em>almost here.</em></h2>
+    <div class="countdown-num" id="countdown">3</div>
+    <p style="margin-top:-6px;">Something's waiting for you on the other side.</p>
+    <button id="reveal-btn" style="display:none;" onclick="showFinale()">Reveal the surprise 🎁</button>
+  </div>
+
+</div>
+
+<!-- STEP 10: FINALE -->
+<div id="finale">
+  <div class="finale-title">09 · the big one</div>
+  <div class="name-reveal" id="name-reveal"></div>
+
+  <p style="font-size:13px; color:var(--cream-dim); margin-top:2px;">pop every balloon</p>
+  <div class="balloon-row" id="balloon-row"></div>
+
+  <div class="cake" id="cake-section" style="opacity:0.35; pointer-events:none; transition:opacity .5s ease;">
+    <div class="candles" id="candles"></div>
+    <div class="cake-body"></div>
+    <p class="blow-hint" id="blow-hint">pop the balloons first, then tap each flame to blow it out</p>
+  </div>
+
+  <div class="final-msg" id="final-msg" style="display:none;">
+    <h1>Happy Birthday, <em>Arshita.</em></h1>
+    <div class="shayari">Chaand raaton mein chamakta hai magar,
+teri muskaan se sharma jaata hai woh bhi,
+har khushi adhoori si lagti hai tere bina,
+tu mil jaaye toh zindagi bhi poori lagti hai.</div>
+    <div class="song-note">♪ Chaand Si Mehbooba Ho Meri — playing, just for you ♪</div>
+    <p class="signature">May this year bring you everything the old songs promise and more. Here's to you, always. 🤍</p>
+  </div>
+</div>
+
+<div id="confetti-layer"></div>
+<div class="hearts-rise" id="hearts-rise"></div>
+
+<footer class="made">made with love, for Arshita — 10.09</footer>
+
+<script>
+const TOTAL_STEPS = 10; // 9 steps + finale as 10th
+
+/* ---------- progress dots ---------- */
+const progressEl = document.getElementById('progress');
+for(let i=1;i<=TOTAL_STEPS;i++){
+  const d = document.createElement('div');
+  d.className = 'phase';
+  d.id = 'phase-'+i;
+  progressEl.appendChild(d);
+}
+function updateProgress(step){
+  for(let i=1;i<=TOTAL_STEPS;i++){
+    const el = document.getElementById('phase-'+i);
+    el.classList.remove('current','done');
+    if(i < step) el.classList.add('done');
+    if(i === step) el.classList.add('current');
+  }
+}
+updateProgress(1);
+
+/* ---------- step navigation ---------- */
+function goTo(step){
+  document.querySelectorAll('.card').forEach(c=>c.classList.remove('active'));
+  const target = document.querySelector('.card[data-step="'+step+'"]');
+  if(target) target.classList.add('active');
+  updateProgress(step);
+  if(step===9) startCountdown();
+}
+
+/* ---------- step 2: quiz ---------- */
+function quizPick(el, correct){
+  const opts = document.querySelectorAll('#quiz-options .opt');
+  const feedback = document.getElementById('quiz-feedback');
+  if(correct){
+    opts.forEach(o=>o.style.pointerEvents='none');
+    el.classList.add('right');
+    feedback.textContent = "Exactly. Tomorrow is all yours. Come on —";
+    setTimeout(()=>goTo(3), 1100);
+  } else {
+    el.classList.add('wrong');
+    feedback.textContent = "Not quite... try again 🙂";
+    setTimeout(()=>el.classList.remove('wrong'),400);
+  }
+}
+
+/* ---------- step 3: hearts ---------- */
+const reasons = [
+  "the way you laugh at your own jokes before finishing them",
+  "how you remember tiny things no one else would notice",
+  "your voice when you're half asleep on a call",
+  "the way you care for people without making it a big deal",
+  "just... you, exactly as you are"
+];
+let foundCount = 0;
+const heartField = document.getElementById('heart-field');
+function layoutHearts(){
+  heartField.innerHTML = '';
+  const positions = [
+    {left:'8%', top:'55%'}, {left:'26%', top:'10%'}, {left:'46%', top:'50%'},
+    {left:'66%', top:'12%'}, {left:'84%', top:'50%'}
+  ];
+  positions.forEach((p,i)=>{
+    const h = document.createElement('div');
+    h.className = 'float-heart';
+    h.textContent = '💗';
+    h.style.left = p.left; h.style.top = p.top;
+    h.style.animationDelay = (i*0.3)+'s';
+    h.onclick = ()=>popHeart(h,i);
+    heartField.appendChild(h);
+  });
+}
+layoutHearts();
+function popHeart(el, idx){
+  if(el.classList.contains('popped')) return;
+  el.classList.add('popped');
+  foundCount++;
+  document.getElementById('reason-counter').textContent = foundCount + ' of 5 found';
+  const rt = document.getElementById('reason-text');
+  rt.textContent = reasons[idx];
+  rt.classList.add('show');
+  if(foundCount>=5){
+    document.getElementById('reasons-next').style.display='inline-block';
+  }
+}
+
+/* ---------- step 4: stars ---------- */
+let caught = 0;
+const starField = document.getElementById('star-field');
+function layoutStars(){
+  starField.innerHTML='';
+  const positions = [
+    {left:'10%', top:'20%'}, {left:'30%', top:'55%'}, {left:'50%', top:'15%'},
+    {left:'70%', top:'50%'}, {left:'88%', top:'22%'}
+  ];
+  positions.forEach((p,i)=>{
+    const s = document.createElement('div');
+    s.className='tap-star';
+    s.textContent='✨';
+    s.style.left = p.left; s.style.top = p.top;
+    s.style.animationDelay = (i*0.25)+'s';
+    s.onclick = ()=>catchStar(s);
+    starField.appendChild(s);
+  });
+}
+layoutStars();
+function catchStar(el){
+  if(el.classList.contains('caught')) return;
+  el.classList.add('caught');
+  caught++;
+  document.getElementById('wish-msg').textContent = caught<5 ? (caught)+' of 5 caught — keep going' : 'wish made. it will come true.';
+  if(caught>=5){
+    document.getElementById('stars-next').style.display='inline-block';
+  }
+}
+
+/* ---------- step 9: countdown then auto reveal button ---------- */
+let countdownStarted = false;
+function startCountdown(){
+  if(countdownStarted) return;
+  countdownStarted = true;
+  let n = 3;
+  const el = document.getElementById('countdown');
+  const timer = setInterval(()=>{
+    n--;
+    if(n>0){ el.textContent = n; }
+    else {
+      clearInterval(timer);
+      el.textContent = '✨';
+      document.getElementById('reveal-btn').style.display='inline-block';
+    }
+  },800);
+}
+
+/* ---------- finale ---------- */
+const NAME = "ARSHITA";
+let poppedBalloons = 0;
+function showFinale(){
+  document.getElementById('finale').classList.add('active');
+  buildNameLetters();
+  buildBalloons();
+  buildCandles();
+  launchConfetti(40);
+}
+
+function buildNameLetters(){
+  const wrap = document.getElementById('name-reveal');
+  wrap.innerHTML='';
+  NAME.split('').forEach((ch,i)=>{
+    const s = document.createElement('span');
+    s.className='name-letter';
+    s.id = 'letter-'+i;
+    s.textContent = ch;
+    wrap.appendChild(s);
+  });
+}
+
+const balloonColors = ['b1','b2','b3','b4','b5','b6','b7'];
+function buildBalloons(){
+  const row = document.getElementById('balloon-row');
+  row.innerHTML='';
+  NAME.split('').forEach((ch,i)=>{
+    const b = document.createElement('div');
+    b.className = 'balloon ' + balloonColors[i % balloonColors.length];
+    b.textContent = ch;
+    b.onclick = ()=>popBalloon(b,i);
+    row.appendChild(b);
+  });
+}
+function popBalloon(el, idx){
+  if(el.classList.contains('popped')) return;
+  el.classList.add('popped');
+  document.getElementById('letter-'+idx).classList.add('lit');
+  poppedBalloons++;
+  launchConfetti(10);
+  if(poppedBalloons>=NAME.length){
+    const cake = document.getElementById('cake-section');
+    cake.style.opacity = '1';
+    cake.style.pointerEvents = 'auto';
+    document.getElementById('blow-hint').textContent = 'tap each flame to blow it out';
+  }
+}
+
+let blownOut = 0;
+let totalCandles = 3;
+function buildCandles(){
+  const wrap = document.getElementById('candles');
+  wrap.innerHTML='';
+  for(let i=0;i<totalCandles;i++){
+    const c = document.createElement('div');
+    c.className='candle';
+    c.innerHTML = '<div class="candle-stick"></div><div class="flame" onclick="blowCandle(this)"></div>';
+    wrap.appendChild(c);
+  }
+}
+function blowCandle(el){
+  if(el.classList.contains('out')) return;
+  el.classList.add('out');
+  blownOut++;
+  if(blownOut>=totalCandles){
+    setTimeout(()=>{
+      document.getElementById('blow-hint').style.display='none';
+      document.getElementById('final-msg').style.display='block';
+      launchConfetti(90);
+      launchHearts(18);
+    }, 400);
+  }
+}
+
+/* ---------- confetti + hearts ---------- */
+const confettiColors = ['#ff8fa3','#ffd76a','#c6b6ff','#fdf6ec','#ef5677'];
+function launchConfetti(n){
+  const layer = document.getElementById('confetti-layer');
+  for(let i=0;i<n;i++){
+    const p = document.createElement('div');
+    p.className='confetti-piece';
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.background = confettiColors[Math.floor(Math.random()*confettiColors.length)];
+    p.style.animationDuration = (2.2 + Math.random()*1.8) + 's';
+    p.style.animationDelay = (Math.random()*0.4)+'s';
+    p.style.transform = 'rotate('+(Math.random()*360)+'deg)';
+    layer.appendChild(p);
+    setTimeout(()=>p.remove(), 4500);
+  }
+}
+function launchHearts(n){
+  const layer = document.getElementById('hearts-rise');
+  const emojis = ['💗','🤍','✨'];
+  for(let i=0;i<n;i++){
+    const h = document.createElement('div');
+    h.className='rise-heart';
+    h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    h.style.left = Math.random()*100 + 'vw';
+    h.style.setProperty('--drift', (Math.random()*80-40)+'px');
+    h.style.animationDuration = (4+Math.random()*3)+'s';
+    h.style.animationDelay = (Math.random()*1.5)+'s';
+    layer.appendChild(h);
+    setTimeout(()=>h.remove(), 8000);
+  }
+}
+
+/* ---------- background stars ---------- */
+const sky = document.getElementById('sky');
+for(let i=0;i<70;i++){
+  const s = document.createElement('div');
+  s.className='star';
+  s.style.left = Math.random()*100+'vw';
+  s.style.top = Math.random()*100+'vh';
+  s.style.animationDelay = (Math.random()*3.5)+'s';
+  s.style.animationDuration = (2.5+Math.random()*3)+'s';
+  sky.appendChild(s);
+}
+</script>
+
+</body>
+</html>
